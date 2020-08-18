@@ -114,11 +114,11 @@ reset_process_wd()
 
 
 def on_trackbar_change(value):
-    device.send_DisparityConfidenceThreshold(value)
+    device.send_disparity_confidence_threshold(value)
     return
 
 for stream in stream_names:
-    if stream in ["disparity", "depth_color_h", "depth_sipp"]:
+    if stream in ["disparity", "disparity_color", "depth_raw"]:
         cv2.namedWindow(stream)
         trackbar_name = 'Disparity confidence'
         conf_thr_slider_min = 0
@@ -199,7 +199,7 @@ while True:
                     camera = packet.getMetadata().getCameraName()
                 show_nn(nnet_prev["entries_prev"][camera], frame_bgr, labels=labels, config=config, nn2depth=nn2depth)
             cv2.imshow(window_name, frame_bgr)
-        elif packet.stream_name.startswith('depth'):
+        elif packet.stream_name.startswith('depth') or packet.stream_name == 'disparity_color':
             frame = packetData
 
             if len(frame.shape) == 2:
